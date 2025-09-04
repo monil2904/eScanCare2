@@ -2,6 +2,8 @@
 
 A modern, comprehensive hospital management system built with React, Vite, and Supabase. This application provides a complete healthcare solution with patient portals, doctor dashboards, QR code integration, and administrative tools.
 
+
+## The website will be available at: https://monil2904.github.io/eScanCare2/
 ## ✨ Features
 
 ### 🏠 Public Features
@@ -377,7 +379,3 @@ For support and questions:
 - **Performance monitoring** and optimization
 - **User feedback** integration
 - **Feature enhancements** based on usage analytics
-
----
-
-**Built with ❤️ for modern healthcare management**
