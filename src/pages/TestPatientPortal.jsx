@@ -120,7 +120,7 @@ const TestPatientPortal = () => {
             </a>
             <br />
             <a 
-              href="/patient-login" 
+              href="/login" 
               className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
             >
               Go to Patient Login

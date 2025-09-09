@@ -1,12 +1,12 @@
 import {
-    ArrowRightOnRectangleIcon,
-    Bars3Icon,
-    BuildingOfficeIcon,
-    HomeIcon,
-    InformationCircleIcon,
-    PhoneIcon,
-    UserCircleIcon,
-    XMarkIcon
+  ArrowRightOnRectangleIcon,
+  Bars3Icon,
+  BuildingOfficeIcon,
+  HomeIcon,
+  InformationCircleIcon,
+  PhoneIcon,
+  UserCircleIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -17,6 +17,7 @@ const Layout = ({ children }) => {
   const { user, profile, signOut } = useAuthStore()
   const { user: otpUser, profile: otpProfile, signOut: otpSignOut } = useOtpAuthStore()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isSigningOut, setIsSigningOut] = useState(false)
   const location = useLocation()
 
   // Use user from either store
@@ -39,10 +40,29 @@ const Layout = ({ children }) => {
   ]
 
   const handleSignOut = async () => {
-    if (user) {
-      await signOut()
-    } else if (otpUser) {
-      await otpSignOut()
+    if (isSigningOut) return // Prevent multiple clicks
+    
+    try {
+      setIsSigningOut(true)
+      if (user) {
+        await signOut()
+      } else if (otpUser) {
+        await otpSignOut()
+      }
+    } catch (error) {
+      console.error('Sign out error:', error)
+      // Even if there's an error, try to clear local state
+      if (user) {
+        useAuthStore.getState().setUser(null)
+        useAuthStore.getState().setProfile(null)
+      } else if (otpUser) {
+        useOtpAuthStore.getState().setUser(null)
+        useOtpAuthStore.getState().setProfile(null)
+        useOtpAuthStore.getState().setOtpSent(false)
+        useOtpAuthStore.getState().setPhoneNumber('')
+      }
+    } finally {
+      setIsSigningOut(false)
     }
   }
 
@@ -88,7 +108,7 @@ const Layout = ({ children }) => {
                 <div className="flex items-center space-x-4">
                   {/* User-specific navigation */}
                   {userNavigation.map((item) => {
-                    const userType = currentUser.user_metadata?.user_type
+                    const userType = currentProfile?.user_type || currentUser.user_metadata?.user_type
                     const allowedTypes = Array.isArray(item.userType) 
                       ? item.userType 
                       : [item.userType]
@@ -115,9 +135,14 @@ const Layout = ({ children }) => {
                       </span>
                       <button
                         onClick={handleSignOut}
-                        className="text-sm text-gray-500 hover:text-gray-700"
+                        disabled={isSigningOut}
+                        className="text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                        {isSigningOut ? (
+                          <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                        ) : (
+                          <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -184,12 +209,12 @@ const Layout = ({ children }) => {
                         {currentProfile?.full_name || currentUser.email}
                       </div>
                       <div className="text-sm font-medium text-gray-500">
-                        {currentUser.user_metadata?.user_type}
+                        {currentProfile?.user_type || currentUser.user_metadata?.user_type}
                       </div>
                     </div>
                     <div className="mt-3 space-y-1">
                       {userNavigation.map((item) => {
-                        const userType = currentUser.user_metadata?.user_type
+                        const userType = currentProfile?.user_type || currentUser.user_metadata?.user_type
                         const allowedTypes = Array.isArray(item.userType) 
                           ? item.userType 
                           : [item.userType]
@@ -212,9 +237,10 @@ const Layout = ({ children }) => {
                           handleSignOut()
                           setIsMobileMenuOpen(false)
                         }}
-                        className="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                        disabled={isSigningOut}
+                        className="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        Sign out
+                        {isSigningOut ? 'Signing out...' : 'Sign out'}
                       </button>
                     </div>
                   </div>

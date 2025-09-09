@@ -22,7 +22,6 @@ import TestPatientPortal from './pages/TestPatientPortal'
 import AuthChoicePage from './pages/auth/AuthChoicePage'
 import AuthErrorPage from './pages/auth/AuthErrorPage'
 import LoginPage from './pages/auth/LoginPage'
-import PatientLoginPage from './pages/auth/PatientLoginPage'
 import PatientSignupPage from './pages/auth/PatientSignupPage'
 import SignupPage from './pages/auth/SignupPage'
 
@@ -231,7 +230,6 @@ function App() {
             <Route path="/auth" element={<AuthChoicePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/patient-login" element={<PatientLoginPage />} />
             <Route path="/patient-signup" element={<PatientSignupPage />} />
             <Route path="/auth-error" element={<AuthErrorPage />} />
                                 <Route path="/about" element={<AboutPage />} />
@@ -254,7 +252,7 @@ function App() {
                 (user?.user_metadata?.user_type === 'patient' || otpUser?.user_metadata?.user_type === 'patient') ? (
                   <PatientDashboard />
                 ) : (
-                  <Navigate to="/patient-login" replace />
+                  <Navigate to="/login" replace />
                 )
               } 
             />
@@ -262,7 +260,7 @@ function App() {
             <Route 
               path="/doctor/*" 
               element={
-                user?.user_metadata?.user_type === 'doctor' ? (
+                (user?.user_metadata?.user_type === 'doctor' || useAuthStore.getState().profile?.user_type === 'doctor') ? (
                   <DoctorDashboard />
                 ) : (
                   <Navigate to="/login" replace />
@@ -273,7 +271,7 @@ function App() {
             <Route 
               path="/admin/*" 
               element={
-                user?.user_metadata?.user_type === 'admin' ? (
+                (user?.user_metadata?.user_type === 'admin' || useAuthStore.getState().profile?.user_type === 'admin') ? (
                   <AdminDashboard />
                 ) : (
                   <Navigate to="/login" replace />
@@ -284,7 +282,7 @@ function App() {
             <Route 
               path="/staff/*" 
               element={
-                user?.user_metadata?.user_type === 'staff' ? (
+                (user?.user_metadata?.user_type === 'staff' || useAuthStore.getState().profile?.user_type === 'staff') ? (
                   <StaffDashboard />
                 ) : (
                   <Navigate to="/login" replace />
@@ -297,7 +295,9 @@ function App() {
               path="/qr-scanner" 
               element={
                 user?.user_metadata?.user_type === 'doctor' || 
-                user?.user_metadata?.user_type === 'admin' ? (
+                user?.user_metadata?.user_type === 'admin' ||
+                useAuthStore.getState().profile?.user_type === 'doctor' ||
+                useAuthStore.getState().profile?.user_type === 'admin' ? (
                   <QRScanner />
                 ) : (
                   <Navigate to="/login" replace />

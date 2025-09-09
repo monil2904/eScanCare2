@@ -1,10 +1,10 @@
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import { ExclamationTriangleIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../stores/authStore'
 
 const LoginPage = () => {
-  const { signIn, loading } = useAuthStore()
+  const { signIn, loading, checkEmailExists } = useAuthStore()
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -12,6 +12,10 @@ const LoginPage = () => {
     password: ''
   })
   const [errors, setErrors] = useState({})
+  const [showSignupModal, setShowSignupModal] = useState(false)
+  
+  // Debug modal state
+  const [attemptedEmail, setAttemptedEmail] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -47,11 +51,25 @@ const LoginPage = () => {
     return Object.keys(newErrors).length === 0
   }
 
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     
     if (!validateForm()) return
     
+    // First check if email exists before attempting sign in
+    const emailExists = await checkEmailExists(formData.email)
+    
+    if (!emailExists) {
+      setAttemptedEmail(formData.email)
+      // Use setTimeout to ensure state update happens after current execution
+      setTimeout(() => {
+        setShowSignupModal(true)
+      }, 100)
+      return
+    }
+    
+    // Email exists, proceed with sign in
     const result = await signIn(formData.email, formData.password)
     
     if (result.success) {
@@ -70,6 +88,7 @@ const LoginPage = () => {
         default:
           navigate('/')
       }
+    } else {
     }
   }
 
@@ -203,18 +222,52 @@ const LoginPage = () => {
                 Sign up here
               </Link>
             </p>
-            <p className="text-sm text-gray-600 mt-2">
-              Are you a patient?{' '}
-              <Link
-                to="/patient-login"
-                className="font-medium text-primary-600 hover:text-primary-500"
-              >
-                Login with OTP
-              </Link>
-            </p>
           </div>
         </form>
       </div>
+
+      {/* Signup Modal */}
+      {showSignupModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
+          <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div className="p-6">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                <ExclamationTriangleIcon className="w-6 h-6 text-red-600" />
+              </div>
+              
+              <div className="text-center">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  Email Not Found
+                </h3>
+                <p className="text-sm text-gray-600 mb-6">
+                  The email <span className="font-medium text-gray-900">{attemptedEmail}</span> does not exist in our database.
+                </p>
+                <p className="text-sm text-gray-600 mb-6">
+                  Would you like to create a new account?
+                </p>
+              </div>
+
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowSignupModal(false)}
+                  className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowSignupModal(false)
+                    navigate('/signup')
+                  }}
+                  className="flex-1 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  Yes, Sign Up
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

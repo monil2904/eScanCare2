@@ -23,7 +23,7 @@ const PatientDashboard = () => {
   const currentProfile = profile || otpProfile
 
   if (!isPatient) {
-    return <Navigate to="/patient-login" replace />
+    return <Navigate to="/login" replace />
   }
 
   return (

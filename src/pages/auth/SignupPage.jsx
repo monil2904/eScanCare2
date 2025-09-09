@@ -20,8 +20,6 @@ const SignupPage = () => {
     date_of_birth: '',
     gender: '',
     blood_type: '',
-    department_id: '',
-    license_number: '',
     emergency_contact: {
       name: '',
       phone: '',
@@ -129,15 +127,7 @@ const SignupPage = () => {
       newErrors.gender = 'Gender is required'
     }
     
-    // Doctor-specific validation
-    if (formData.user_type === 'doctor') {
-      if (!formData.department_id) {
-        newErrors.department_id = 'Department is required'
-      }
-      if (!formData.license_number) {
-        newErrors.license_number = 'License number is required'
-      }
-    }
+    // No doctor-specific validation needed as these fields are filled by admin
     
     // Emergency contact validation
     if (!formData.emergency_contact.name) {
@@ -348,53 +338,8 @@ const SignupPage = () => {
             </div>
           </div>
 
-          {/* Doctor-specific fields */}
-          {formData.user_type === 'doctor' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="department_id" className="block text-sm font-medium text-gray-700">
-                  Department
-                </label>
-                <select
-                  name="department_id"
-                  value={formData.department_id}
-                  onChange={handleChange}
-                  className={`mt-1 input-field ${
-                    errors.department_id ? 'border-danger-500 focus:ring-danger-500' : ''
-                  }`}
-                >
-                  <option value="">Select Department</option>
-                  {departments.map((dept) => (
-                    <option key={dept.id} value={dept.id}>
-                      {dept.name}
-                    </option>
-                  ))}
-                </select>
-                {errors.department_id && (
-                  <p className="mt-1 text-sm text-danger-600">{errors.department_id}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="license_number" className="block text-sm font-medium text-gray-700">
-                  License Number
-                </label>
-                <input
-                  type="text"
-                  name="license_number"
-                  value={formData.license_number}
-                  onChange={handleChange}
-                  className={`mt-1 input-field ${
-                    errors.license_number ? 'border-danger-500 focus:ring-danger-500' : ''
-                  }`}
-                  placeholder="Medical license number"
-                />
-                {errors.license_number && (
-                  <p className="mt-1 text-sm text-danger-600">{errors.license_number}</p>
-                )}
-              </div>
-            </div>
-          )}
+          {/* Doctor and Staff specific fields (department, specialization, license) are filled by admin - not shown in registration form */}
+          
 
           {/* Password Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

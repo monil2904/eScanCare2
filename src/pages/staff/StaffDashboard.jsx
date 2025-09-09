@@ -238,7 +238,6 @@ const StaffDashboard = () => {
   const handlePatientSelected = (patient) => {
     setSelectedPatient(patient);
     // You can add additional logic here, like opening a patient details modal
-    console.log('Selected patient:', patient);
   };
 
   const openMedicalReportForm = (appointment) => {

@@ -340,4 +340,25 @@ export const useAuthStore = create((set, get) => ({
       set({ loading: false })
     }
   },
+
+  // Check if email exists in Supabase auth users using edge function
+  checkEmailExists: async (email) => {
+    try {
+      const { data, error } = await supabase.functions.invoke('check-email-exists', {
+        body: { email }
+      })
+      
+      
+      if (error) {
+        console.error('Error checking email existence:', error)
+        return false
+      }
+      
+      const exists = data?.exists || false
+      return exists
+    } catch (error) {
+      console.error('Error checking email existence:', error)
+      return false
+    }
+  },
 })) 

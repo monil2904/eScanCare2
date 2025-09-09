@@ -372,7 +372,7 @@ const PatientSignupPage = () => {
                 <>
                   Already have an account?{' '}
                   <Link
-                    to="/patient-login"
+                    to="/login"
                     className="font-medium text-primary-600 hover:text-primary-500"
                   >
                     Login here

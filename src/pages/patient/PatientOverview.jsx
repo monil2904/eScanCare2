@@ -6,12 +6,6 @@ const PatientOverview = () => {
   const { user: authUser, profile: authProfile } = useAuthStore();
   const { user: otpUser, profile: otpProfile } = useOtpAuthStore();
 
-  // Debug information
-  console.log('PatientOverview - Auth User:', authUser);
-  console.log('PatientOverview - Auth Profile:', authProfile);
-  console.log('PatientOverview - OTP User:', otpUser);
-  console.log('PatientOverview - OTP Profile:', otpProfile);
-
   const currentUser = authUser || otpUser;
   const currentProfile = authProfile || otpProfile;
 
@@ -20,18 +14,6 @@ const PatientOverview = () => {
       <div className="card">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Patient Overview</h2>
         
-        {/* Debug Information - Remove in production */}
-        <div className="bg-yellow-50 p-4 rounded-lg mb-6">
-          <h3 className="font-semibold text-yellow-800 mb-2">Debug Information</h3>
-          <div className="text-sm text-yellow-700 space-y-1">
-            <p><strong>Auth User:</strong> {authUser ? 'Present' : 'None'}</p>
-            <p><strong>OTP User:</strong> {otpUser ? 'Present' : 'None'}</p>
-            <p><strong>Current User:</strong> {currentUser ? 'Present' : 'None'}</p>
-            <p><strong>User Type:</strong> {currentUser?.user_metadata?.user_type || 'Unknown'}</p>
-            <p><strong>Profile:</strong> {currentProfile ? 'Loaded' : 'Not Loaded'}</p>
-            <p><strong>Profile Name:</strong> {currentProfile?.full_name || 'Unknown'}</p>
-          </div>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Welcome Card */}
