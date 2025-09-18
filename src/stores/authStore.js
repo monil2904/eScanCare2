@@ -146,7 +146,6 @@ export const useAuthStore = create((set, get) => ({
           user_type: userData.user_type,
           department_id: userData.department_id || null,
           specialization: userData.specialization || null,
-          license_number: userData.license_number || null,
           emergency_contact: userData.emergency_contact || null,
           address: userData.address || null,
         })
@@ -359,6 +358,112 @@ export const useAuthStore = create((set, get) => ({
     } catch (error) {
       console.error('Error checking email existence:', error)
       return false
+    }
+  },
+
+  // Sign in with Google
+  signInWithGoogle: async () => {
+    try {
+      set({ loading: true })
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      })
+      
+      if (error) throw error
+      
+      return { success: true, data }
+    } catch (error) {
+      console.error('Google sign in error:', error)
+      toast.error('Failed to sign in with Google')
+      return { success: false, error }
+    } finally {
+      set({ loading: false })
+    }
+  },
+
+  // Sign up with Google
+  signUpWithGoogle: async () => {
+    try {
+      set({ loading: true })
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      })
+      
+      if (error) throw error
+      
+      return { success: true, data }
+    } catch (error) {
+      console.error('Google sign up error:', error)
+      toast.error('Failed to sign up with Google')
+      return { success: false, error }
+    } finally {
+      set({ loading: false })
+    }
+  },
+
+  // Handle OAuth callback and create profile if needed
+  handleOAuthCallback: async () => {
+    try {
+      const { data, error } = await supabase.auth.getSession()
+      
+      if (error) throw error
+      
+      if (data.session?.user) {
+        const user = data.session.user
+        
+        // Check if profile exists
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+        
+        if (profileError && profileError.code === 'PGRST116') {
+          // Profile doesn't exist, create one
+          const { data: newProfile, error: createError } = await supabase
+            .from('profiles')
+            .insert({
+              id: user.id,
+              email: user.email,
+              full_name: user.user_metadata?.full_name || user.user_metadata?.name || '',
+              user_type: 'patient', // Default to patient for OAuth users
+              phone: user.user_metadata?.phone || null,
+              address: null,
+              emergency_contact: null
+            })
+            .select()
+            .single()
+          
+          if (createError) {
+            console.error('Profile creation error:', createError)
+            throw createError
+          }
+          
+          set({ user, profile: newProfile })
+          toast.success('Welcome to eScanCare Hospital!')
+          return { success: true, user, profile: newProfile }
+        } else if (profileError) {
+          throw profileError
+        } else {
+          set({ user, profile })
+          toast.success('Welcome back!')
+          return { success: true, user, profile }
+        }
+      }
+      
+      return { success: false, error: 'No session found' }
+    } catch (error) {
+      console.error('OAuth callback error:', error)
+      toast.error('Failed to complete authentication')
+      return { success: false, error }
     }
   },
 })) 

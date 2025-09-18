@@ -13,12 +13,7 @@ const PatientRegistrationForm = ({ isOpen, onClose, onPatientRegistered }) => {
     date_of_birth: '',
     gender: '',
     blood_type: '',
-    address: {
-      street: '',
-      city: '',
-      state: '',
-      zip: ''
-    },
+    address: '',
     emergency_contact: {
       name: '',
       relationship: '',
@@ -68,15 +63,6 @@ const PatientRegistrationForm = ({ isOpen, onClose, onPatientRegistered }) => {
     }
   };
 
-  const handleAddressChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      address: {
-        ...prev.address,
-        [field]: value
-      }
-    }));
-  };
 
   const handleEmergencyContactChange = (field, value) => {
     setFormData(prev => ({
@@ -115,16 +101,8 @@ const PatientRegistrationForm = ({ isOpen, onClose, onPatientRegistered }) => {
       newErrors.gender = 'Gender is required';
     }
 
-    if (!formData.address.street.trim()) {
-      newErrors.address = 'Street address is required';
-    }
-
-    if (!formData.emergency_contact.name.trim()) {
-      newErrors.emergency_contact_name = 'Emergency contact name is required';
-    }
-
-    if (!formData.emergency_contact.phone.trim()) {
-      newErrors.emergency_contact_phone = 'Emergency contact phone is required';
+    if (!formData.address.trim()) {
+      newErrors.address = 'Address is required';
     }
 
     setErrors(newErrors);
@@ -213,12 +191,7 @@ const PatientRegistrationForm = ({ isOpen, onClose, onPatientRegistered }) => {
         date_of_birth: '',
         gender: '',
         blood_type: '',
-        address: {
-          street: '',
-          city: '',
-          state: '',
-          zip: ''
-        },
+        address: '',
         emergency_contact: {
           name: '',
           relationship: '',
@@ -387,61 +360,21 @@ const PatientRegistrationForm = ({ isOpen, onClose, onPatientRegistered }) => {
           {/* Address Information */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Address Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Street Address *
-                </label>
-                <input
-                  type="text"
-                  value={formData.address.street}
-                  onChange={(e) => handleAddressChange('street', e.target.value)}
-                  className={`input-field ${errors.address ? 'border-red-500' : ''}`}
-                  placeholder="Enter street address"
-                />
-                {errors.address && (
-                  <p className="mt-1 text-sm text-red-600">{errors.address}</p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  City
-                </label>
-                <input
-                  type="text"
-                  value={formData.address.city}
-                  onChange={(e) => handleAddressChange('city', e.target.value)}
-                  className="input-field"
-                  placeholder="Enter city"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  State
-                </label>
-                <input
-                  type="text"
-                  value={formData.address.state}
-                  onChange={(e) => handleAddressChange('state', e.target.value)}
-                  className="input-field"
-                  placeholder="Enter state"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  ZIP Code
-                </label>
-                <input
-                  type="text"
-                  value={formData.address.zip}
-                  onChange={(e) => handleAddressChange('zip', e.target.value)}
-                  className="input-field"
-                  placeholder="Enter ZIP code"
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Address *
+              </label>
+              <textarea
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                rows={3}
+                className={`input-field ${errors.address ? 'border-red-500' : ''}`}
+                placeholder="Enter complete address (street, city, state, ZIP code)"
+              />
+              {errors.address && (
+                <p className="mt-1 text-sm text-red-600">{errors.address}</p>
+              )}
             </div>
           </div>
 

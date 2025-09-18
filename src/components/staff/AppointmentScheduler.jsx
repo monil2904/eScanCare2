@@ -68,7 +68,7 @@ const AppointmentScheduler = ({ isOpen, onClose, onAppointmentCreated }) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, full_name, specialization, license_number')
+        .select('id, full_name, specialization')
         .eq('user_type', 'doctor')
         .eq('department_id', departmentId);
 

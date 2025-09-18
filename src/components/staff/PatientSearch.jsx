@@ -149,11 +149,9 @@ const PatientSearch = ({ onPatientSelected }) => {
                       </div>
                     )}
                     
-                    {patient.address?.street && (
+                    {patient.address && (
                       <div className="text-sm text-gray-600 mt-1">
-                        <span className="font-medium">Address:</span> {patient.address.street}
-                        {patient.address.city && `, ${patient.address.city}`}
-                        {patient.address.state && `, ${patient.address.state}`}
+                        <span className="font-medium">Address:</span> {patient.address}
                       </div>
                     )}
                   </div>

@@ -1,11 +1,11 @@
 import {
-    CalendarIcon,
-    DocumentTextIcon,
-    EnvelopeIcon,
-    ExclamationTriangleIcon,
-    HeartIcon,
-    PhoneIcon,
-    UserIcon
+  CalendarIcon,
+  DocumentTextIcon,
+  EnvelopeIcon,
+  ExclamationTriangleIcon,
+  HeartIcon,
+  PhoneIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -174,10 +174,7 @@ const PatientDetailsPage = () => {
             <div className="mt-4 pt-4 border-t border-gray-200">
               <h3 className="text-sm font-medium text-gray-700 mb-2">Address</h3>
               <p className="text-gray-700">
-                {patient.address.street}
-                {patient.address.city && `, ${patient.address.city}`}
-                {patient.address.state && `, ${patient.address.state}`}
-                {patient.address.zip && ` ${patient.address.zip}`}
+                {patient.address}
               </p>
             </div>
           )}

@@ -160,7 +160,6 @@ serve(async (req) => {
         full_name: whitelistEntry.full_name,
         phone: whitelistEntry.phone,
         specialization: whitelistEntry.specialization,
-        license_number: whitelistEntry.license_number
       }
     })
 
@@ -186,7 +185,6 @@ serve(async (req) => {
         user_type: whitelistEntry.user_type,
         department_id: whitelistEntry.department_id,
         specialization: whitelistEntry.specialization,
-        license_number: whitelistEntry.license_number
       })
 
     if (profileError) {
@@ -246,3 +244,4 @@ serve(async (req) => {
     )
   }
 })
+

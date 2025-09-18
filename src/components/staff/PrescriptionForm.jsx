@@ -1,9 +1,9 @@
 import {
-    BeakerIcon,
-    CheckIcon,
-    PlusIcon,
-    TrashIcon,
-    XMarkIcon
+  BeakerIcon,
+  CheckIcon,
+  PlusIcon,
+  TrashIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -74,7 +74,6 @@ const PrescriptionForm = ({ isOpen, onClose, appointmentId, patientId, doctorId,
           generic_name: '',
           dosage: '',
           frequency: '',
-          quantity: '',
           duration: '',
           timing: 'after_food', // before_food, after_food, empty_stomach
           instructions: '',
@@ -296,18 +295,6 @@ const PrescriptionForm = ({ isOpen, onClose, appointmentId, patientId, doctorId,
                             className="w-full p-2 border border-gray-300 rounded-md"
                             placeholder="e.g., 3 times daily"
                             required
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Quantity
-                          </label>
-                          <input
-                            type="text"
-                            value={medication.quantity}
-                            onChange={(e) => updateMedication(index, 'quantity', e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                            placeholder="e.g., 30 tablets"
                           />
                         </div>
                         <div>

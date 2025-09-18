@@ -10,7 +10,6 @@ CREATE TABLE whitelist (
     phone TEXT,
     department_id UUID REFERENCES departments(id),
     specialization TEXT, -- For doctors
-    license_number TEXT, -- For doctors
     status TEXT CHECK (status IN ('pending', 'approved', 'rejected')) DEFAULT 'pending',
     invited_by UUID REFERENCES profiles(id),
     approved_by UUID REFERENCES profiles(id),
@@ -107,3 +106,4 @@ LEFT JOIN profiles approver ON w.approved_by = approver.id;
 
 -- Grant permissions for the view
 GRANT SELECT ON whitelist_admin_view TO authenticated;
+

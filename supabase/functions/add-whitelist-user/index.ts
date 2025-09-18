@@ -55,7 +55,7 @@ serve(async (req) => {
     }
 
     // Parse request body
-    const { email, user_type, full_name, phone, department_id, specialization, license_number } = await req.json()
+    const { email, user_type, full_name, phone, department_id, specialization } = await req.json()
 
     // Validate required fields
     if (!email || !user_type || !full_name) {
@@ -119,7 +119,6 @@ serve(async (req) => {
         phone,
         department_id,
         specialization,
-        license_number,
         invited_by: user.id,
         status: 'pending'
       })
@@ -160,3 +159,4 @@ serve(async (req) => {
     )
   }
 })
+

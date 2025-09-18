@@ -215,3 +215,4 @@ If you encounter issues:
 3. Ensure edge functions are deployed
 4. Check Supabase logs for function errors
 5. Verify RLS policies are working correctly
+

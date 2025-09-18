@@ -32,7 +32,6 @@ export const DatabaseSchema = {
     user_type: 'text', // 'patient', 'doctor', 'staff', 'admin'
     department_id: 'uuid references departments',
     specialization: 'text',
-    license_number: 'text',
     created_at: 'timestamp',
     updated_at: 'timestamp'
   },

@@ -27,7 +27,6 @@ const AdminDashboard = () => {
     phone: '',
     department_id: '',
     specialization: '',
-    license_number: ''
   })
 
   const [approveForm, setApproveForm] = useState({
@@ -97,7 +96,6 @@ const AdminDashboard = () => {
         phone: '',
         department_id: '',
         specialization: '',
-        license_number: ''
       })
       fetchWhitelistEntries()
     } catch (error) {
@@ -410,15 +408,6 @@ const AdminDashboard = () => {
                         className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">License Number</label>
-                      <input
-                        type="text"
-                        value={addForm.license_number}
-                        onChange={(e) => setAddForm({ ...addForm, license_number: e.target.value })}
-                        className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                      />
-                    </div>
                   </>
                 )}
                 <div className="flex justify-end space-x-3 pt-4">
@@ -504,3 +493,4 @@ const AdminDashboard = () => {
 }
 
 export default AdminDashboard
+

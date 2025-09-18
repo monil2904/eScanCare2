@@ -35,12 +35,19 @@ const MedicalReportForm = ({ isOpen, onClose, appointmentId, patientId, doctorId
     lab_investigations: {
       hematology: {
         hemoglobin: '',
-        rbc_count: '',
-        wbc_count: '',
-        neutrophils_percent: '',
-        lymphocytes_percent: '',
-        platelets: '',
-        esr: ''
+        red_blood_cells: '',
+        white_blood_cells: '',
+        neutrophils: '',
+        lymphocytes: '',
+        monocytes: '',
+        eosinophils: '',
+        basophils: '',
+        erythrocyte_sedimentation_rate: '',
+        platelets_thrombocytes: '',
+        mean_corpuscular_hemoglobin: '',
+        mean_corpuscular_hemoglobin_concentration: '',
+        mean_corpuscular_volume: '',
+        packed_cell_volume: ''
       },
       biochemistry: {
         bsl_random: '',
@@ -52,13 +59,19 @@ const MedicalReportForm = ({ isOpen, onClose, appointmentId, patientId, doctorId
         alt_sgpt: '',
         alp: '',
         bilirubin_total: '',
+        bilirubin_direct: '',
+        bilirubin_indirect: '',
         total_protein: '',
         albumin: ''
       },
       electrolytes_renal: {
-        sodium: '',
-        potassium: '',
-        urea: '',
+        sodium_ion: '',
+        potassium_ion: '',
+        blood_urea: '',
+        calcium: '',
+        chloride: '',
+        phosphate: '',
+        uric_acid: '',
         serum_creatinine: ''
       }
     },
@@ -131,13 +144,29 @@ const MedicalReportForm = ({ isOpen, onClose, appointmentId, patientId, doctorId
 
   const handleInputChange = (section, field, value) => {
     if (section) {
-      setFormData(prev => ({
-        ...prev,
-        [section]: {
-          ...prev[section],
-          [field]: value
-        }
-      }));
+      // Handle nested dot notation like 'lab_investigations.hematology'
+      if (section.includes('.')) {
+        const [parentSection, childSection] = section.split('.');
+        setFormData(prev => ({
+          ...prev,
+          [parentSection]: {
+            ...prev[parentSection],
+            [childSection]: {
+              ...prev[parentSection][childSection],
+              [field]: value
+            }
+          }
+        }));
+      } else {
+        // Handle single level sections
+        setFormData(prev => ({
+          ...prev,
+          [section]: {
+            ...prev[section],
+            [field]: value
+          }
+        }));
+      }
     } else {
       setFormData(prev => ({
         ...prev,
@@ -236,7 +265,6 @@ const MedicalReportForm = ({ isOpen, onClose, appointmentId, patientId, doctorId
           systematic_examination: {
             cvs: '',
             rs: '',
-            op: '',
             git: '',
             cns: ''
           },
@@ -402,7 +430,7 @@ const MedicalReportForm = ({ isOpen, onClose, appointmentId, patientId, doctorId
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Time (Optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
                   <input
                     type="time"
                     value={formData.time}
@@ -534,7 +562,7 @@ const MedicalReportForm = ({ isOpen, onClose, appointmentId, patientId, doctorId
                   {Object.keys(formData.lab_investigations.hematology).map((field) => (
                     <div key={field}>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        {field.replace(/_/g, ' ').toUpperCase()}
+                        {field.replace(/_/g, ' ').toUpperCase().replace(' COUNT', '').replace(' PERCENT', '')}
                       </label>
                       <input
                         type="text"
