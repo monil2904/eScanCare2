@@ -22,8 +22,10 @@ const QRCodeGenerator = () => {
   useEffect(() => {
     if (user?.id) {
       // Create a shareable link for the QR code
+      // Use the correct base URL for GitHub Pages
       const baseUrl = window.location.origin
-      const patientProfileUrl = `${baseUrl}/patient-profile/${user.id}`
+      const basePath = import.meta.env.BASE_URL || '/eScanCare2/'
+      const patientProfileUrl = `${baseUrl}${basePath}patient-profile/${user.id}`
       setQrValue(patientProfileUrl)
       setLoading(false)
     }
