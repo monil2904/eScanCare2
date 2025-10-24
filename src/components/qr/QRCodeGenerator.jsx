@@ -1,7 +1,8 @@
 import {
-    ArrowDownTrayIcon,
-    ExclamationTriangleIcon,
-    QrCodeIcon
+  ArrowDownTrayIcon,
+  ClipboardDocumentIcon,
+  ExclamationTriangleIcon,
+  QrCodeIcon
 } from '@heroicons/react/24/outline'
 import { QRCodeSVG } from 'qrcode.react'
 import { useEffect, useState } from 'react'
@@ -11,9 +12,14 @@ const QRCodeGenerator = () => {
   const { user } = useAuthStore()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [qrValue, setQrValue] = useState('')
 
   useEffect(() => {
     if (user?.id) {
+      // Create a shareable link for the QR code
+      const baseUrl = window.location.origin
+      const patientProfileUrl = `${baseUrl}/patient-profile/${user.id}`
+      setQrValue(patientProfileUrl)
       setLoading(false)
     }
   }, [user])
@@ -39,6 +45,17 @@ const QRCodeGenerator = () => {
     }
     
     img.src = 'data:image/svg+xml;base64,' + btoa(svgData)
+  }
+
+  const copyLinkToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(qrValue)
+      // You could add a toast notification here if you have toast available
+      alert('Link copied to clipboard!')
+    } catch (err) {
+      console.error('Failed to copy link:', err)
+      alert('Failed to copy link. Please copy manually.')
+    }
   }
 
   if (loading) {
@@ -98,7 +115,7 @@ const QRCodeGenerator = () => {
         {/* QR Code Display */}
         <div id="qr-code" className="inline-block p-4 bg-white rounded-lg border border-gray-200">
           <QRCodeSVG
-            value={user.id}
+            value={qrValue}
             size={200}
             level="M"
             includeMargin={true}
@@ -108,6 +125,11 @@ const QRCodeGenerator = () => {
 
         {/* QR Code Information */}
         <div className="space-y-4">
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <p className="text-sm text-gray-600 mb-2">Patient Profile Link:</p>
+            <p className="font-mono text-sm break-all text-blue-600">{qrValue}</p>
+          </div>
+
           <div className="bg-gray-50 p-4 rounded-lg">
             <p className="text-sm text-gray-600 mb-2">Patient ID:</p>
             <p className="font-mono text-sm break-all">{user.id}</p>
@@ -119,7 +141,9 @@ const QRCodeGenerator = () => {
             </p>
             <ul className="text-left space-y-1">
               <li>• Show this QR code to doctors and nurses</li>
-              <li>• They can scan it to access your medical records</li>
+              <li>• They can scan it with any QR scanner app</li>
+              <li>• Scanning will open your patient profile link</li>
+              <li>• Healthcare providers can access your medical records</li>
               <li>• Keep this code secure and private</li>
               <li>• This QR code is unique to your profile</li>
             </ul>
@@ -135,6 +159,14 @@ const QRCodeGenerator = () => {
             <ArrowDownTrayIcon className="w-4 h-4 mr-2" />
             Download QR Code
           </button>
+          
+          <button
+            onClick={copyLinkToClipboard}
+            className="btn-secondary"
+          >
+            <ClipboardDocumentIcon className="w-4 h-4 mr-2" />
+            Copy Link
+          </button>
         </div>
 
         {/* Security Notice */}
@@ -144,8 +176,8 @@ const QRCodeGenerator = () => {
             <div className="text-sm text-warning-800">
               <p className="font-medium mb-1">Security Notice</p>
               <p>
-                This QR code contains your unique patient ID. Keep it secure and only share 
-                it with authorized healthcare providers. This code is permanent and linked to your profile.
+                This QR code contains a direct link to your patient profile. Keep it secure and only share 
+                it with authorized healthcare providers. Anyone with this link can access your medical information.
               </p>
             </div>
           </div>

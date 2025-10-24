@@ -384,7 +384,7 @@ const PatientRegistrationForm = ({ isOpen, onClose, onPatientRegistered }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Contact Name *
+                  Contact Name (Optional)
                 </label>
                 <input
                   type="text"
@@ -400,7 +400,7 @@ const PatientRegistrationForm = ({ isOpen, onClose, onPatientRegistered }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Relationship
+                  Relationship (Optional)
                 </label>
                 <input
                   type="text"
@@ -413,7 +413,7 @@ const PatientRegistrationForm = ({ isOpen, onClose, onPatientRegistered }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Contact Phone *
+                  Contact Phone (Optional)
                 </label>
                 <input
                   type="tel"

@@ -245,6 +245,12 @@ function App() {
               element={<PatientDetailsPage />} 
             />
             
+            {/* Public Patient Profile Route (for QR code links) */}
+            <Route 
+              path="/patient-profile/:patientId" 
+              element={<PatientDetailsPage />} 
+            />
+            
             {/* Protected Routes */}
             <Route 
               path="/patient/*" 

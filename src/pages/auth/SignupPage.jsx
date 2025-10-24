@@ -124,13 +124,8 @@ const SignupPage = () => {
     
     // No doctor-specific validation needed as these fields are filled by admin
     
-    // Emergency contact validation
-    if (!formData.emergency_contact.name) {
-      newErrors.emergency_contact_name = 'Emergency contact name is required'
-    }
-    if (!formData.emergency_contact.phone) {
-      newErrors.emergency_contact_phone = 'Emergency contact phone is required'
-    }
+    // Emergency contact validation - now optional
+    // No validation needed for emergency contact fields
     
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -416,7 +411,7 @@ const SignupPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Contact Name
+                  Contact Name (Optional)
                 </label>
                 <input
                   type="text"
@@ -434,7 +429,7 @@ const SignupPage = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Contact Phone
+                  Contact Phone (Optional)
                 </label>
                 <input
                   type="tel"
@@ -452,7 +447,7 @@ const SignupPage = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Relationship
+                  Relationship (Optional)
                 </label>
                 <input
                   type="text"
