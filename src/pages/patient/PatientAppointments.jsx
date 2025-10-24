@@ -3,9 +3,14 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../stores/authStore';
+import { useOtpAuthStore } from '../../stores/otpAuthStore';
 
 const PatientAppointments = () => {
-  const { user } = useAuthStore();
+  const { user: authUser } = useAuthStore();
+  const { user: otpUser } = useOtpAuthStore();
+  
+  // Use user from either store
+  const user = authUser || otpUser;
   const [appointments, setAppointments] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [doctors, setDoctors] = useState([]);
@@ -21,11 +26,18 @@ const PatientAppointments = () => {
   });
 
   useEffect(() => {
-    fetchAppointments();
+    if (user?.id) {
+      fetchAppointments();
+    }
     fetchDepartments();
-  }, []);
+  }, [user]);
 
   const fetchAppointments = async () => {
+    if (!user?.id) {
+      console.log('No user ID available, skipping appointment fetch');
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from('appointments')
@@ -88,6 +100,11 @@ const PatientAppointments = () => {
 
   const handleSubmitBooking = async (e) => {
     e.preventDefault();
+    
+    if (!user?.id) {
+      toast.error('User not authenticated');
+      return;
+    }
     
     if (!bookingForm.department_id || !bookingForm.doctor_id || !bookingForm.appointment_date || !bookingForm.appointment_time) {
       toast.error('Please fill in all required fields');

@@ -1,17 +1,22 @@
 import {
-    BuildingOfficeIcon,
-    CalendarIcon,
-    ClockIcon,
-    DocumentTextIcon,
-    UserIcon
+  BuildingOfficeIcon,
+  CalendarIcon,
+  ClockIcon,
+  DocumentTextIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../stores/authStore';
+import { useOtpAuthStore } from '../../stores/otpAuthStore';
 
 const PatientMedicalRecords = () => {
-  const { user } = useAuthStore();
+  const { user: authUser } = useAuthStore();
+  const { user: otpUser } = useOtpAuthStore();
+  
+  // Use user from either store
+  const user = authUser || otpUser;
   const [medicalRecords, setMedicalRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedRecord, setSelectedRecord] = useState(null);

@@ -7,9 +7,14 @@ import {
 import { QRCodeSVG } from 'qrcode.react'
 import { useEffect, useState } from 'react'
 import { useAuthStore } from '../../stores/authStore'
+import { useOtpAuthStore } from '../../stores/otpAuthStore'
 
 const QRCodeGenerator = () => {
-  const { user } = useAuthStore()
+  const { user: authUser } = useAuthStore()
+  const { user: otpUser } = useOtpAuthStore()
+  
+  // Use user from either store
+  const user = authUser || otpUser
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [qrValue, setQrValue] = useState('')
