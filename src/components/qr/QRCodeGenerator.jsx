@@ -39,7 +39,9 @@ const QRCodeGenerator = () => {
         basePath += '/'
       }
       
-      const patientProfileUrl = `${baseUrl}${basePath}patient-profile/${user.id}`
+      // Use a query parameter approach instead of path-based routing
+      // This avoids GitHub Pages routing issues
+      const patientProfileUrl = `${baseUrl}${basePath}?patient=${user.id}`
       setQrValue(patientProfileUrl)
       setLoading(false)
     }

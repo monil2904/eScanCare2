@@ -10,20 +10,21 @@ import { useOtpAuthStore } from './stores/otpAuthStore'
 // Layout Components
 import EmergencyBanner from './components/common/EmergencyBanner'
 import Layout from './components/layout/Layout'
+import QRRedirect from './components/QRRedirect'
 
 // Public Pages
 import AboutPage from './pages/AboutPage'
+import AuthChoicePage from './pages/auth/AuthChoicePage'
+import AuthErrorPage from './pages/auth/AuthErrorPage'
+import LoginPage from './pages/auth/LoginPage'
+import PatientSignupPage from './pages/auth/PatientSignupPage'
+import SignupPage from './pages/auth/SignupPage'
 import ContactPage from './pages/ContactPage'
 import DepartmentsPage from './pages/DepartmentsPage'
 import HomePage from './pages/HomePage'
 import TestConnectionPage from './pages/TestConnectionPage'
 import TestPage from './pages/TestPage'
 import TestPatientPortal from './pages/TestPatientPortal'
-import AuthChoicePage from './pages/auth/AuthChoicePage'
-import AuthErrorPage from './pages/auth/AuthErrorPage'
-import LoginPage from './pages/auth/LoginPage'
-import PatientSignupPage from './pages/auth/PatientSignupPage'
-import SignupPage from './pages/auth/SignupPage'
 
 // Protected Pages
 import QRScanner from './components/qr/QRScanner'
@@ -238,6 +239,9 @@ function App() {
             <Route path="/test" element={<TestPage />} />
             <Route path="/test-connection" element={<TestConnectionPage />} />
             <Route path="/test-patient-portal" element={<TestPatientPortal />} />
+            
+            {/* QR Code Redirect Route - handles ?patient=id query parameter */}
+            <Route path="/" element={<QRRedirect />} />
             
             {/* Public Patient View - must come before protected routes */}
             <Route 
