@@ -24,25 +24,19 @@ const QRCodeGenerator = () => {
       // Create a shareable link for the QR code
       const baseUrl = window.location.origin
       
-      // Extract the base path from the current URL
-      // If we're on GitHub Pages, the pathname will be like /eScanCare2/patient/qr-code
-      // We need to extract /eScanCare2/ from it
+      // Detect if we're on GitHub Pages and construct the correct path
       let basePath = '/'
-      const currentPath = window.location.pathname
-      
-      if (currentPath.includes('/eScanCare2/')) {
-        // Extract the base path up to /eScanCare2/
-        const pathParts = currentPath.split('/')
-        const repoIndex = pathParts.findIndex(part => part === 'eScanCare2')
-        if (repoIndex !== -1) {
-          basePath = '/' + pathParts.slice(1, repoIndex + 1).join('/') + '/'
-        }
-      } else if (baseUrl.includes('github.io')) {
-        // Fallback: if we're on GitHub Pages but path doesn't contain repo name
+      if (baseUrl.includes('github.io')) {
+        // We're on GitHub Pages, need to include the repository name
         basePath = '/eScanCare2/'
       } else if (import.meta.env.BASE_URL) {
         // Use the BASE_URL from Vite config
         basePath = import.meta.env.BASE_URL
+      }
+      
+      // Ensure basePath ends with a slash
+      if (!basePath.endsWith('/')) {
+        basePath += '/'
       }
       
       const patientProfileUrl = `${baseUrl}${basePath}patient-profile/${user.id}`
