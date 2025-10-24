@@ -12,8 +12,9 @@ import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 
-const PatientDetailsPage = () => {
-  const { patientId } = useParams();
+const PatientDetailsPage = ({ patientId: propPatientId }) => {
+  const { patientId: paramPatientId } = useParams();
+  const patientId = propPatientId || paramPatientId;
   const [patient, setPatient] = useState(null);
   const [prescriptions, setPrescriptions] = useState([]);
   const [medicalRecords, setMedicalRecords] = useState([]);
