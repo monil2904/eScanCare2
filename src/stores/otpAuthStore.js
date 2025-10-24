@@ -157,6 +157,8 @@ export const useOtpAuthStore = create((set, get) => ({
   // Sign out
   signOut: async () => {
     try {
+      set({ loading: true })
+      
       const { error } = await supabase.auth.signOut()
       if (error) throw error
       
@@ -168,6 +170,8 @@ export const useOtpAuthStore = create((set, get) => ({
       console.error('Sign out error:', error)
       toast.error('Failed to sign out')
       return { success: false, error }
+    } finally {
+      set({ loading: false })
     }
   },
   

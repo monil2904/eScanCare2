@@ -1,12 +1,12 @@
 import {
-  ArrowRightOnRectangleIcon,
-  Bars3Icon,
-  BuildingOfficeIcon,
-  HomeIcon,
-  InformationCircleIcon,
-  PhoneIcon,
-  UserCircleIcon,
-  XMarkIcon
+    ArrowRightOnRectangleIcon,
+    Bars3Icon,
+    BuildingOfficeIcon,
+    HomeIcon,
+    InformationCircleIcon,
+    PhoneIcon,
+    UserCircleIcon,
+    XMarkIcon
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -44,24 +44,39 @@ const Layout = ({ children }) => {
     
     try {
       setIsSigningOut(true)
+      
+      // Call the appropriate signOut function
+      let result
       if (user) {
-        await signOut()
+        result = await signOut()
       } else if (otpUser) {
-        await otpSignOut()
+        result = await otpSignOut()
       }
+      
+      // Check if signOut was successful
+      if (result && !result.success) {
+        throw new Error('Sign out failed')
+      }
+      
     } catch (error) {
       console.error('Sign out error:', error)
+      
       // Even if there's an error, try to clear local state
-      if (user) {
-        useAuthStore.getState().setUser(null)
-        useAuthStore.getState().setProfile(null)
-      } else if (otpUser) {
-        useOtpAuthStore.getState().setUser(null)
-        useOtpAuthStore.getState().setProfile(null)
-        useOtpAuthStore.getState().setOtpSent(false)
-        useOtpAuthStore.getState().setPhoneNumber('')
+      try {
+        if (user) {
+          useAuthStore.getState().setUser(null)
+          useAuthStore.getState().setProfile(null)
+        } else if (otpUser) {
+          useOtpAuthStore.getState().setUser(null)
+          useOtpAuthStore.getState().setProfile(null)
+          useOtpAuthStore.getState().setOtpSent(false)
+          useOtpAuthStore.getState().setPhoneNumber('')
+        }
+      } catch (clearError) {
+        console.error('Error clearing local state:', clearError)
       }
     } finally {
+      // Always reset loading state
       setIsSigningOut(false)
     }
   }
