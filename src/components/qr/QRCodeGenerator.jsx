@@ -23,25 +23,7 @@ const QRCodeGenerator = () => {
     if (user?.id) {
       // Create a shareable link for the QR code
       const baseUrl = window.location.origin
-      
-      // Detect if we're on GitHub Pages and construct the correct path
-      let basePath = '/'
-      if (baseUrl.includes('github.io')) {
-        // We're on GitHub Pages, need to include the repository name
-        basePath = '/eScanCare2/'
-      } else if (import.meta.env.BASE_URL) {
-        // Use the BASE_URL from Vite config
-        basePath = import.meta.env.BASE_URL
-      }
-      
-      // Ensure basePath ends with a slash
-      if (!basePath.endsWith('/')) {
-        basePath += '/'
-      }
-      
-      // Use a query parameter approach instead of path-based routing
-      // This avoids GitHub Pages routing issues
-      const patientProfileUrl = `${baseUrl}${basePath}?patient=${user.id}`
+      const patientProfileUrl = `${baseUrl}/patient-profile/${user.id}`
       setQrValue(patientProfileUrl)
       setLoading(false)
     }
