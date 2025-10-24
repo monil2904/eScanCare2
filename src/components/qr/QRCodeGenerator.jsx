@@ -22,9 +22,29 @@ const QRCodeGenerator = () => {
   useEffect(() => {
     if (user?.id) {
       // Create a shareable link for the QR code
-      // Use the correct base URL for GitHub Pages
       const baseUrl = window.location.origin
-      const basePath = import.meta.env.BASE_URL || '/eScanCare2/'
+      
+      // Extract the base path from the current URL
+      // If we're on GitHub Pages, the pathname will be like /eScanCare2/patient/qr-code
+      // We need to extract /eScanCare2/ from it
+      let basePath = '/'
+      const currentPath = window.location.pathname
+      
+      if (currentPath.includes('/eScanCare2/')) {
+        // Extract the base path up to /eScanCare2/
+        const pathParts = currentPath.split('/')
+        const repoIndex = pathParts.findIndex(part => part === 'eScanCare2')
+        if (repoIndex !== -1) {
+          basePath = '/' + pathParts.slice(1, repoIndex + 1).join('/') + '/'
+        }
+      } else if (baseUrl.includes('github.io')) {
+        // Fallback: if we're on GitHub Pages but path doesn't contain repo name
+        basePath = '/eScanCare2/'
+      } else if (import.meta.env.BASE_URL) {
+        // Use the BASE_URL from Vite config
+        basePath = import.meta.env.BASE_URL
+      }
+      
       const patientProfileUrl = `${baseUrl}${basePath}patient-profile/${user.id}`
       setQrValue(patientProfileUrl)
       setLoading(false)
